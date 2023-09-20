@@ -43,6 +43,7 @@ class metal : public material {
         bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered)
         const override {
             vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
+            // Random scattering of light to create fuzziness
             scattered = ray(rec.p, reflected + fuzz*random_unit_vector());
             attenuation = albedo;
             return (dot(scattered.direction(), rec.normal) > 0);
@@ -53,6 +54,7 @@ class metal : public material {
         double fuzz;
 };
 
+// Glass like materials
 class dielectric : public material {
     public:
         dielectric(double index_of_refraction) : ir(index_of_refraction) {}
