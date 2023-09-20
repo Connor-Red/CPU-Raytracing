@@ -114,7 +114,7 @@ inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
 
-vec3 random_in_unit_sphere() {
+inline vec3 random_in_unit_sphere() {
     while (true) {
         auto p = vec3::random(-1,1);
         if (p.length_squared() >= 1) continue;
@@ -122,13 +122,26 @@ vec3 random_in_unit_sphere() {
     }
 }
 
-vec3 random_unit_vector() {
+inline vec3 random_unit_vector() {
     return unit_vector(random_in_unit_sphere());
 }
 
-vec3 reflect(const vec3& v, const vec3& n) {
+
+
+inline vec3 random_on_hemisphere(const vec3& normal) {
+    vec3 on_unit_sphere = random_unit_vector();
+    if (dot(on_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+        return on_unit_sphere;
+    else
+        return -on_unit_sphere;
+}
+
+
+inline vec3 reflect(const vec3& v, const vec3& n) {
     return v - 2*dot(v,n)*n;
 }
+
+
 
 inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat){
     auto cos_theta = fmin(dot(-uv, n), 1.0);
